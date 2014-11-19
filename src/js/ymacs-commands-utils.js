@@ -70,8 +70,11 @@ Ymacs_Buffer.newCommands({
             case ".js":
             return "javascript";
 
-            case ".lisp": case ".scm":
+            case ".lisp":
             return "lisp";
+
+            case ".scm":
+            return "scheme";
         }
 
         return null;
