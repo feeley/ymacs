@@ -120,7 +120,7 @@ Ymacs_Buffer.newCommands({
         });
     }),
 
-    htmlize_region: Ymacs_Interactive("r\nP", function(begin, end, lineNum) {
+    htmlize_region_to_string: function(begin, end, lineNum) {
         this.tokenizer.finishParsing();
         var row = this._positionToRowCol(begin).row,
         html = String.buffer(),
@@ -137,7 +137,11 @@ Ymacs_Buffer.newCommands({
             html(this._textProperties.getLineHTML(row, this.code[row], null), "</div>\n");
             ++row;
         }
-        html = html.get();
+        return html.get();
+    },
+
+    htmlize_region: Ymacs_Interactive("r\nP", function(begin, end, lineNum) {
+        var html = this.cmd("htmlize_region_to_string", begin, end, lineNum);
         var tmp = this.ymacs.switchToBuffer("*Htmlize*");
         tmp.setCode(html);
         tmp.cmd("xml_mode", true);
