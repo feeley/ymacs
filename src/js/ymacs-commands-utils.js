@@ -195,11 +195,16 @@ Ymacs_Buffer.newCommands({
         buffer.cmd("switch_to_buffer", name);
     }),
 
-    find_file: Ymacs_Interactive("FFind file: ", function(name) {
+    find_file: Ymacs_Interactive("FFind file: ", function (name) {
+        this.cmd("find_file_with_continuation", name, function () { });
+    }),
+
+    find_file_with_continuation: function (name, cont) {
         var self = this;
         self.ymacs.fs_fileType(name, function (type) {
             if (type === "directory") {
                 self.signalInfo("Can't open directory");
+                cont();
             } else {
                 self.ymacs.fs_getFileContents(name, true, function (code, stamp) {
                     var buffer = self.ymacs.getBuffer(name);
@@ -210,6 +215,7 @@ Ymacs_Buffer.newCommands({
                         buffer.dirty(false);
                         buffer.cmd("set_buffer_mode");
                         buffer.cmd("switch_to_buffer", name);
+                        cont();
                     }
 
                     if (buffer) {
@@ -217,12 +223,15 @@ Ymacs_Buffer.newCommands({
                             find_file();
                         } else if (buffer.stamp == stamp) {
                             buffer.cmd("switch_to_buffer", name);
+                            cont();
                         } else {
                             var msg = "File " + name + " changed on disk.  "
                                 + (buffer.dirty() ? "Discard your edits?" : "Reread from disk?");
                             buffer.cmd("minibuffer_yn", msg, function (yes) {
                                 if (yes)
                                     find_file();
+                                else
+                                    cont();
                             });
                         }
                     } else {
@@ -234,7 +243,7 @@ Ymacs_Buffer.newCommands({
                 });
             }
         });
-    }),
+    },
 
     write_file: Ymacs_Interactive("FWrite file: ", function(name){
         var self = this;
