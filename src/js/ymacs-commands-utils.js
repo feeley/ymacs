@@ -122,9 +122,10 @@ Ymacs_Buffer.newCommands({
 
     htmlize_region_to_string: function(begin, end, lineNum) {
         this.tokenizer.finishParsing();
-        var row = this._positionToRowCol(begin).row,
-        html = String.buffer(),
-        line = row, pad;
+        var row = this._positionToRowCol(begin).row;
+        var html = String.buffer();
+        var line = row;
+        var pad;
         if (lineNum && !lineNum.empty)
             line = parseInt(lineNum, 10);
         end = this._positionToRowCol(end).row;
