@@ -138,13 +138,14 @@
 
     function read_existing_buffer_name(arg, cont) {
         prompt.call(this, arg);
-        this.cmd("minibuffer_read_buffer", cont);
+        this.cmd("minibuffer_read_buffer", cont, false);
         // XXX: enforce it!
     };
 
-    function read_buffer_name(arg, cont) {
+    function read_existing_buffer_name_rotate(arg, cont) {
         prompt.call(this, arg);
-        this.cmd("minibuffer_read_buffer", cont);
+        this.cmd("minibuffer_read_buffer", cont, true);
+        // XXX: enforce it!
     };
 
     function read_character(arg, cont) {
@@ -250,7 +251,7 @@
     var ARG_READERS = {
         a: read_function_name,
         b: read_existing_buffer_name,
-        B: read_buffer_name,
+        B: read_existing_buffer_name_rotate,
         c: read_character,
         C: read_command_name,
         d: get_point,

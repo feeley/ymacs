@@ -925,9 +925,19 @@ Ymacs_Buffer.newCommands({
         });
     }),
 
-    kill_buffer: Ymacs_Interactive(function() {
+    kill_buffer: Ymacs_Interactive("bKill buffer: ", function(name) {
         this.whenYmacs(function(ymacs){
-            ymacs.killBuffer(this);
+            var buffer = ymacs.getBuffer(name);
+            if (buffer.dirty() && !name.match(/^\*.*\*$/)) {
+                var msg = "Buffer "+name+" modified; kill anyway?";
+                buffer.cmd("minibuffer_yn", msg, function (yes) {
+                    if (yes) {
+                        ymacs.killBuffer(buffer);
+                    }
+                });
+            } else {
+                ymacs.killBuffer(buffer);
+            }
         });
     }),
 

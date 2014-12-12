@@ -236,10 +236,12 @@ Ymacs_Buffer.newMode("minibuffer_mode", function(){
             });
         },
 
-        minibuffer_read_buffer: function(cont) {
+        minibuffer_read_buffer: function(cont, rotate) {
             this.whenYmacs(function(ymacs){
                 var bufferNames = ymacs.buffers.map("name");
-                bufferNames.push(bufferNames.shift());
+                if (rotate) {
+                    bufferNames.push(bufferNames.shift());
+                }
                 read_with_continuation.call(this, bufferNames, cont);
                 handle_tab.call(this);
             });
