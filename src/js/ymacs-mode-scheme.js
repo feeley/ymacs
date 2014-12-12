@@ -405,8 +405,8 @@ set! set-car! set-cdr!", "i");
         "when"                : "1*",
         "lambda"              : "1*",
         "unless"              : "1*",
-        "define"              : "2*",
-        "define-macro"        : "2*",
+        "define"              : "1*",
+        "define-macro"        : "1*",
         "begin"               : "0+",
         "let"                 : "1*",
         "case"                : "1*",
@@ -752,9 +752,9 @@ Ymacs_Buffer.newMode("scheme_mode", function() {
             }
         }
     });
+    var was_paren_match = this.cmd("paren_match_mode", true);
     var keymap = Ymacs_Keymap_SchemeMode();
     this.pushKeymap(keymap);
-    var was_paren_match = this.cmd("paren_match_mode", true);
 
     var changed_commands = this.replaceCommands({
         "forward_sexp"            : "scheme_forward_sexp",
